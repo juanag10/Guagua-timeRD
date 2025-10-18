@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GuaguaTime RD - Simulador de Rutas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="img/logo.png" type="image/png">
+  <link rel="manifest" href="/carpetajason/manifest.json">
+</head>
+<body>
+
+  <header class="site-header">
+    <img src="img/logo.png" alt="Logo GuaguaTime RD" class="logo-header">
+    <h1 class="site-title">GuaguaTime RD</h1>
+    <p class="subtitulo">Simulador de rutas y costos del transporte público</p>
+  </header>
+
+  <div class="page-container">
+    <nav class="navbar" aria-label="Navegación principal">
+      <ul id="menu" class="navbar__menu">
+        <li><a href="#" onclick="verInicio()">Inicio</a></li>
+        <li><a href="#" onclick="mostrarRuta('ruta1')">27 de Febrero ↔ Luperón</a></li>
+        <li><a href="#" onclick="mostrarRuta('ruta2')">Máximo Gómez ↔ Independencia</a></li>
+        <li><a href="#" onclick="mostrarRuta('ruta3')">Duarte ↔ Kennedy</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Paneles de la app -->
+      <section class="panel app-panel" id="panel-busqueda">
+        <form id="form-buscar" class="form-grid" autocomplete="off">
+          <label>Origen
+            <input id="inp-origen" list="list-barrios" placeholder="Ej: Villa Mella" required>
+          </label>
+          <label>Destino
+            <input id="inp-destino" list="list-barrios" placeholder="Ej: Gazcue" required>
+          </label>
+          <datalist id="list-barrios"></datalist>
+
+          <label>Ordenar por
+            <select id="sel-ranking">
+              <option value="tiempo">Tiempo</option>
+              <option value="costo">Costo</option>
+              <option value="transbordos">Transbordos</option>
+            </select>
+          </label>
+
+          <fieldset class="checks">
+            <legend>Condiciones</legend>
+            <label><input type="checkbox" class="cond" value="lluvia"> Lluvia</label>
+            <label><input type="checkbox" class="cond" value="hora pico"> Hora pico</label>
+          </fieldset>
+
+          <label class="switch">
+            <input type="checkbox" id="chk-ahorro"> Modo ahorro
+          </label>
+
+          <label>Idioma
+            <select id="sel-lang">
+              <option value="es" selected>ES</option>
+              <option value="en">EN</option>
+            </select>
+          </label>
+
+          <button type="submit" class="btn-primary">Buscar</button>
+        </form>
+      </section>
+
+      <section class="panel app-panel" id="panel-resultados">
+        <h2>Resultados</h2>
+        <ul id="lista-resultados" class="cards"></ul>
+      </section>
+
+      <section class="panel app-panel" id="panel-favoritos">
+        <h2>Favoritos</h2>
+        <ul id="fav-list" class="chips"></ul>
+      </section>
+
+      <!-- Rutas con precios + mini-mapas de Google -->
+      <section id="ruta1" class="panel ruta" hidden>
+        <h3>Ruta: 27 de Febrero ↔ Luperón</h3>
+        <img src="img/ruta-27-febrero-luperon.jpg" alt="27 de Febrero ↔ Luperón" class="ruta-foto">
+
+        <div class="map-wrap">
+          <iframe
+            class="map-embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Avenida%2027%20de%20Febrero%20y%20Avenida%20Luper%C3%B3n%2C%20Santo%20Domingo&z=15&output=embed">
+          </iframe>
+          <a class="map-link" href="https://maps.app.goo.gl/XFtSCNmN4GVisCXc9" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+
+        <ul>
+          <li><strong>Carro público</strong>
+            <ul>
+              <li>Precio normal: RD$35</li>
+              <li>Con clima adverso: RD$40</li>
+              <li>Con tráfico o desvíos: RD$45</li>
+            </ul>
+          </li>
+          <li><strong>Guagua</strong>
+            <ul>
+              <li>Precio normal: RD$60</li>
+              <li>Con clima adverso: RD$70</li>
+              <li>Con tráfico o retrasos: RD$75</li>
+            </ul>
+          </li>
+        </ul>
+        <button class="btn-secondary" onclick="verInicio()">← Volver al inicio</button>
+      </section>
+
+      <section id="ruta2" class="panel ruta" hidden>
+        <h3>Ruta: Máximo Gómez ↔ Independencia</h3>
+        <img src="img/ruta-maximo-gomez-independencia.jpeg" alt="Máximo Gómez ↔ Independencia" class="ruta-foto">
+
+        <div class="map-wrap">
+          <iframe
+            class="map-embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Avenida%20M%C3%A1ximo%20G%C3%B3mez%20y%20Avenida%20Luper%C3%B3n%2C%20Santo%20Domingo&z=14&output=embed">
+          </iframe>
+          <a class="map-link" href="https://maps.app.goo.gl/JbUthLQM1TXoTaMY6" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+
+        <ul>
+          <li><strong>Carro público</strong>
+            <ul>
+              <li>Precio normal: RD$30</li>
+              <li>Con clima adverso: RD$35</li>
+              <li>Con tráfico: RD$40</li>
+            </ul>
+          </li>
+          <li><strong>Guagua</strong>
+            <ul>
+              <li>Precio normal: RD$50</li>
+              <li>Con clima adverso: RD$60</li>
+              <li>Con tráfico: RD$65</li>
+            </ul>
+          </li>
+        </ul>
+        <button class="btn-secondary" onclick="verInicio()">← Volver al inicio</button>
+      </section>
+
+      <section id="ruta3" class="panel ruta" hidden>
+        <h3>Ruta: Duarte ↔ Kennedy</h3>
+        <img src="img/ruta-duarte-kennedy.jpg" alt="Duarte ↔ Kennedy" class="ruta-foto">
+
+        <div class="map-wrap">
+          <iframe
+            class="map-embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Avenida%20Juan%20Pablo%20Duarte%2C%20Santo%20Domingo&z=14&output=embed">
+          </iframe>
+          <a class="map-link" href="https://maps.app.goo.gl/UksR3t2mkNCgzLUy8" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+
+        <ul>
+          <li><strong>Carro público</strong>
+            <ul>
+              <li>Precio normal: RD$35</li>
+              <li>Con lluvia: RD$40</li>
+              <li>Con tráfico: RD$45</li>
+            </ul>
+          </li>
+          <li><strong>Guagua</strong>
+            <ul>
+              <li>Precio normal: RD$220</li>
+              <li>Con clima adverso: RD$250</li>
+              <li>Con tráfico: RD$270</li>
+            </ul>
+          </li>
+        </ul>
+        <button class="btn-secondary" onclick="verInicio()">← Volver al inicio</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>Los precios pueden variar según el clima, la hora o la disponibilidad del transporte.</p>
+    </footer>
+  </div>
+
+  <script>
+    function verInicio() {
+      document.querySelectorAll('.ruta').forEach(s => s.hidden = true);
+      document.querySelectorAll('.app-panel').forEach(s => s.hidden = false);
+      menu.hidden = true;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function mostrarRuta(id) {
+      document.querySelectorAll('.app-panel').forEach(s => s.hidden = true);
+      document.querySelectorAll('.ruta').forEach(s => s.hidden = true);
+      const sec = document.getElementById(id);
+      if (sec) sec.hidden = false;
+      menu.hidden = true;
+      sec?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  </script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
